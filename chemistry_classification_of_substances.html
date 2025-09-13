@@ -15,10 +15,8 @@
       padding: 0;
     }
 
-    sub, sup {
+    .subnums {
       font-family: 'Segoe UI Variable Small', sans-serif;
-      font-variant-numeric: tabular-nums;
-      unicode-bidi: isolate;
     }
 
     header {
@@ -889,10 +887,14 @@
     let current;
     let correct = 0, total = 0;
 
+    function highlightSubnums(text) {
+      return text.replace(/([₀₁₂₃₄₅₆₇₈₉])/g, '<span class="subnums">$1</span>');
+    }
+
     function newSubstance() {
       const idx = Math.floor(Math.random() * substances.length);
       current = substances[idx];
-      document.getElementById("substance").innerHTML = current.text;
+      document.getElementById("substance").innerHTML = highlightSubnums(current.text);
       const shuffled = categories.sort(() => 0.5 - Math.random()).slice(0,6);
       if (!shuffled.includes(current.type)) {
         shuffled[Math.floor(Math.random()*6)] = current.type;
@@ -928,7 +930,6 @@
       const answerButtons = [...document.querySelectorAll('.answer')];
       const incorrectButtons = answerButtons.filter(b => b.textContent !== current.type && !b.classList.contains('disabled'));
       if (incorrectButtons.length <= 2) return;
-      // случайным образом скрываем две неверные кнопки
       for (let i = 0; i < 2; i++) {
         const randIndex = Math.floor(Math.random() * incorrectButtons.length);
         incorrectButtons[randIndex].classList.add('disabled');
@@ -941,6 +942,7 @@
       [...document.querySelectorAll(".answer")].forEach(a => {
         if (a.textContent === current.type) a.classList.add("correct");
       });
+
     };
     document.getElementById("hint").onclick = useHint;
   </script>

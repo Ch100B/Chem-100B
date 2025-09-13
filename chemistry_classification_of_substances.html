@@ -24,17 +24,24 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 20px;
+      height: 42px;
     }
     .left-banner {
       background-color: #E0E0E0;
       padding: 6px 12px;
       font-size: 14px;
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
     .right-banner {
       font-weight: 700;
       font-size: 36px;
       letter-spacing: -1px;
       color: #000;
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
     .right-banner .num {
       font-style: italic;
@@ -49,12 +56,13 @@
       color: #776CFF;
       margin-top: 10px;
     }
-    .container {
+    .container, .filters {
       max-width: 800px;
       margin: 20px auto;
       padding: 20px;
       background: #fff;
       border: 2px solid #776CFF;
+      box-sizing: border-box;
     }
     .substance {
       text-align: center;
@@ -108,16 +116,22 @@
       font-size: 18px;
     }
     .filters {
-      margin: 10px auto 20px;
-      max-width: 800px;
       padding: 10px;
       border: 2px solid #776CFF;
       background: #fff;
+      margin: 0 auto 20px;
     }
     .filters summary {
       cursor: pointer;
       font-weight: 700;
       color: #776CFF;
+    }
+    .filters[open] > div {
+      background-color: #776CFF;
+      padding: 5px;
+    }
+    .filters[open] input[type='checkbox'] {
+      accent-color: #F5F4FF;
     }
   </style>
 </head>
@@ -942,9 +956,10 @@
       [...document.querySelectorAll(".answer")].forEach(a => {
         if (a.textContent === current.type) a.classList.add("correct");
       });
-
     };
     document.getElementById("hint").onclick = useHint;
   </script>
 </body>
+</html>
+
 </html>

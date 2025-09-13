@@ -7,20 +7,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Segoe+UI+Variable&display=swap" rel="stylesheet">
   <style>
-   body {
-  font-family: 'Roboto Flex', sans-serif;
-  background-color: #F5F4FF;
-  color: #000;
-  margin: 0;
-  padding: 0;
-}
-
-/* Подстрочные и надстрочные символы */
-sub, sup {
-  font-family: 'Segoe UI Variable Small', sans-serif;
-  font-variant-numeric: tabular-nums;
-  unicode-bidi: isolate;
+    body {
+      font-family: 'Roboto Flex', sans-serif;
+      background-color: #F5F4FF;
+      color: #000;
+      margin: 0;
+      padding: 0;
     }
+
+    sub, sup {
+      font-family: 'Segoe UI Variable Small', sans-serif;
+      font-variant-numeric: tabular-nums;
+      unicode-bidi: isolate;
+    }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -36,6 +36,7 @@ sub, sup {
       font-weight: 700;
       font-size: 36px;
       letter-spacing: -1px;
+      color: #000;
     }
     .right-banner .num {
       font-style: italic;
@@ -77,6 +78,12 @@ sub, sup {
       font-size: 16px;
       cursor: pointer;
       background: #F5F4FF;
+      opacity: 1;
+      transition: opacity 0.3s;
+    }
+    .answer.disabled {
+      opacity: 0.3;
+      pointer-events: none;
     }
     .answer.correct { background: #C8E6C9; }
     .answer.incorrect { background: #FFCDD2; }
@@ -102,7 +109,6 @@ sub, sup {
       font-weight: 700;
       font-size: 18px;
     }
-    /* Стили для фильтров */
     .filters {
       margin: 10px auto 20px;
       max-width: 800px;
@@ -114,9 +120,6 @@ sub, sup {
       cursor: pointer;
       font-weight: 700;
       color: #776CFF;
-    }
-    sup, sub {
-      font-family: 'Segoe UI Variable Small', sans-serif;
     }
   </style>
 </head>
@@ -889,7 +892,7 @@ sub, sup {
     function newSubstance() {
       const idx = Math.floor(Math.random() * substances.length);
       current = substances[idx];
-      document.getElementById("substance").textContent = current.text;
+      document.getElementById("substance").innerHTML = current.text;
       const shuffled = categories.sort(() => 0.5 - Math.random()).slice(0,6);
       if (!shuffled.includes(current.type)) {
         shuffled[Math.floor(Math.random()*6)] = current.type;
@@ -921,13 +924,25 @@ sub, sup {
       document.getElementById("resultBox").textContent = `Результативность: ${correct}/${total} (${percent}%)`;
     }
 
+    function useHint() {
+      const answerButtons = [...document.querySelectorAll('.answer')];
+      const incorrectButtons = answerButtons.filter(b => b.textContent !== current.type && !b.classList.contains('disabled'));
+      if (incorrectButtons.length <= 2) return;
+      // случайным образом скрываем две неверные кнопки
+      for (let i = 0; i < 2; i++) {
+        const randIndex = Math.floor(Math.random() * incorrectButtons.length);
+        incorrectButtons[randIndex].classList.add('disabled');
+        incorrectButtons.splice(randIndex,1);
+      }
+    }
+
     document.getElementById("next").onclick = newSubstance;
     document.getElementById("showAnswer").onclick = () => {
       [...document.querySelectorAll(".answer")].forEach(a => {
         if (a.textContent === current.type) a.classList.add("correct");
       });
     };
-    document.getElementById("hint").onclick = () => alert(`Категория: ${current.type}`);
+    document.getElementById("hint").onclick = useHint;
   </script>
 </body>
 </html>

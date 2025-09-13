@@ -13,9 +13,20 @@
       color: #000;
       margin: 0;
       padding: 0;
+      sub, sup {
+      font-family: 'Segoe UI Variable Small', sans-serif;
     }
-     .substance span.subnums {
-      font-family: 'Segoe UI Variable', sans-serif;
+
+      sub, sup {
+      font-variant-numeric: tabular-nums;
+    }
+
+      sub:before,
+      sup:before {
+      font-family: 'Segoe UI Variable Small', sans-serif;
+    }
+      sub, sup {
+      unicode-bidi: isolate;
     }
     header {
       display: flex;

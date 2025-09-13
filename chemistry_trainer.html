@@ -13,6 +13,23 @@
       margin: 0;
       padding: 0;
     }
+    sub, sup {
+  font-family: 'Segoe UI Variable Small', sans-serif;
+}
+
+sub, sup {
+  font-variant-numeric: tabular-nums;
+}
+
+sub:before,
+sup:before {
+  font-family: 'Segoe UI Variable Small', sans-serif;
+}
+
+/* Для явного подбора именно символов ₀₁₂₃₄₅₆₇₈₉ */
+sub, sup {
+  unicode-bidi: isolate;
+}
     header {
       display: flex;
       justify-content: space-between;

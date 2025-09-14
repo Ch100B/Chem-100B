@@ -893,24 +893,44 @@
       return text.replace(/([₀₁₂₃₄₅₆₇₈₉])/g, '<span class="subnums">$1</span>');
     }
 
-    function newSubstance() {
-      const idx = Math.floor(Math.random() * substances.length);
-      current = substances[idx];
-      document.getElementById("substance").innerHTML = highlightSubnums(current.text);
-      const shuffled = categories.sort(() => 0.5 - Math.random()).slice(0,6);
-      if (!shuffled.includes(current.type)) {
-        shuffled[Math.floor(Math.random()*6)] = current.type;
-      }
-      const answersDiv = document.getElementById("answers");
-      answersDiv.innerHTML = "";
-      shuffled.forEach(cat => {
-        const btn = document.createElement("div");
-        btn.className = "answer";
-        btn.textContent = cat;
-        btn.onclick = () => checkAnswer(btn, cat);
-        answersDiv.appendChild(btn);
-      });
-    }
+let lastTwo = [];
+
+function newSubstance() {
+  const maxTries = 20;
+  let idx, candidate, tries = 0;
+
+  do {
+    idx = Math.floor(Math.random() * substances.length);
+    candidate = substances[idx];
+    tries++;
+  } while (
+    lastTwo.length >= 2 &&
+    lastTwo[lastTwo.length - 1] === "средняя соль" &&
+    lastTwo[lastTwo.length - 2] === "средняя соль" &&
+    candidate.type === "средняя соль" &&
+    tries < maxTries
+  );
+
+  current = candidate;
+  document.getElementById("substance").textContent = current.text;
+
+  const shuffled = categories.sort(() => 0.5 - Math.random()).slice(0, 6);
+  if (!shuffled.includes(current.type)) {
+    shuffled[Math.floor(Math.random() * 6)] = current.type;
+  }
+  const answersDiv = document.getElementById("answers");
+  answersDiv.innerHTML = "";
+  shuffled.forEach(cat => {
+    const btn = document.createElement("div");
+    btn.className = "answer";
+    btn.textContent = cat;
+    btn.onclick = () => checkAnswer(btn, cat);
+    answersDiv.appendChild(btn);
+  });
+
+  lastTwo.push(current.type);
+  if (lastTwo.length > 2) lastTwo.shift();
+}
 
     function checkAnswer(btn, cat) {
       total++;
